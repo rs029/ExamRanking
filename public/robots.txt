@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://examranking.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
+
+# Disallow admin and private areas (when implemented)
+Disallow: /admin/
+Disallow: /api/private/
+Disallow: /_next/
+Disallow: /static/
+
+# Allow important pages
+Allow: /
+Allow: /calculator/
+Allow: /contact
+Allow: /privacy-policy
+Allow: /terms
+Allow: /disclaimer
+Allow: /refund

@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "jee-main",
+    "name": "JEE Main",
+    "description": "Joint Entrance Examination (Main) for engineering admissions",
+    "category": "Engineering",
+    "icon": "calculator",
+    "totalMarks": 300,
+    "subjects": ["Physics", "Chemistry", "Mathematics"]
+  },
+  {
+    "slug": "neet",
+    "name": "NEET",
+    "description": "National Eligibility cum Entrance Test for medical admissions",
+    "category": "Medical",
+    "icon": "stethoscope",
+    "totalMarks": 720,
+    "subjects": ["Physics", "Chemistry", "Biology"]
+  },
+  {
+    "slug": "cat",
+    "name": "CAT",
+    "description": "Common Admission Test for MBA programs",
+    "category": "Management",
+    "icon": "briefcase",
+    "totalMarks": 300,
+    "subjects": ["Verbal Ability", "Data Interpretation", "Quantitative Aptitude"]
+  },
+  {
+    "slug": "gate",
+    "name": "GATE",
+    "description": "Graduate Aptitude Test in Engineering",
+    "category": "Engineering",
+    "icon": "cpu",
+    "totalMarks": 100,
+    "subjects": ["Technical Subject", "Engineering Mathematics", "General Aptitude"]
+  },
+  {
+    "slug": "upsc-cse",
+    "name": "UPSC CSE",
+    "description": "Civil Services Examination for government jobs",
+    "category": "Government",
+    "icon": "building",
+    "totalMarks": 2025,
+    "subjects": ["General Studies", "Optional Subject", "Essay"]
+  },
+  {
+    "slug": "ssc-cgl",
+    "name": "SSC CGL",
+    "description": "Staff Selection Commission Combined Graduate Level",
+    "category": "Government",
+    "icon": "users",
+    "totalMarks": 200,
+    "subjects": ["General Intelligence", "General Awareness", "Quantitative Aptitude", "English"]
+  },
+  {
+    "slug": "bank-po",
+    "name": "Bank PO",
+    "description": "Banking Probationary Officer examinations",
+    "category": "Banking",
+    "icon": "credit-card",
+    "totalMarks": 200,
+    "subjects": ["Reasoning", "Quantitative Aptitude", "English", "General Awareness"]
+  },
+  {
+    "slug": "clat",
+    "name": "CLAT",
+    "description": "Common Law Admission Test for law programs",
+    "category": "Law",
+    "icon": "scale",
+    "totalMarks": 150,
+    "subjects": ["English", "Current Affairs", "Legal Reasoning", "Logical Reasoning", "Quantitative Techniques"]
+  }
+]
