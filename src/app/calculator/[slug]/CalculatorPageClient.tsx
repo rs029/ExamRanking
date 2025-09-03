@@ -141,7 +141,7 @@ export default function CalculatorPageClient({ slug }: CalculatorPageClientProps
                     Fill out the form on the left to calculate your {exam.name} rank and get detailed performance analysis.
                   </p>
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="text-sm font-medium text-gray-900 mb-2">What you'll get:</h4>
+                    <h4 className="text-sm font-medium text-gray-900 mb-2">What you&apos;ll get:</h4>
                     <ul className="text-sm text-gray-600 space-y-1">
                       <li>• Overall rank and category rank</li>
                       <li>• Detailed score breakdown</li>

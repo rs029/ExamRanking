@@ -20,7 +20,7 @@ export default function TermsPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Acceptance of Terms</h2>
               <p className="text-gray-700 mb-4">
-                By accessing and using Exam Ranking ("the Service"), you accept and agree to be bound by the terms 
+                By accessing and using Exam Ranking (&quot;the Service&quot;), you accept and agree to be bound by the terms 
                 and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
               </p>
             </section>
@@ -64,7 +64,7 @@ export default function TermsPage() {
                 <li>Results are estimates based on available data and algorithms</li>
                 <li>Official ranks may vary from our calculations</li>
                 <li>We do not guarantee admission or selection based on our results</li>
-                <li>The service is provided "as is" without warranties of any kind</li>
+                <li>The service is provided &quot;as is&quot; without warranties of any kind</li>
                 <li>We are not responsible for decisions made based on our calculations</li>
               </ul>
             </section>

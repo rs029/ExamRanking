@@ -33,7 +33,7 @@ export default function RefundPage() {
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
                 <li>No payment is required for basic rank calculations</li>
                 <li>No refunds are applicable for free services</li>
-                <li>Free services are provided "as is" without guarantees</li>
+                <li>Free services are provided &quot;as is&quot; without guarantees</li>
               </ul>
             </section>
 

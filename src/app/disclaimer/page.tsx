@@ -20,7 +20,7 @@ export default function DisclaimerPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">General Disclaimer</h2>
               <p className="text-gray-700 mb-4">
-                The information provided by Exam Ranking ("we," "us," or "our") on our website and through our services 
+                The information provided by Exam Ranking (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) on our website and through our services 
                 is for general informational and educational purposes only. All information on the site and our services 
                 is provided in good faith, however we make no representation or warranty of any kind, express or implied, 
                 regarding the accuracy, adequacy, validity, reliability, availability, or completeness of any information 

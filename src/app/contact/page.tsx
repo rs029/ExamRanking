@@ -13,7 +13,7 @@ export default function ContactPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Contact Us</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Have questions about your exam rank calculation? We're here to help! 
+            Have questions about your exam rank calculation? We&apos;re here to help! 
             Reach out to our support team for assistance.
           </p>
         </div>
@@ -86,7 +86,7 @@ export default function ContactPage() {
                     Is my data secure?
                   </summary>
                   <p className="mt-2 text-sm text-gray-600 pl-4">
-                    Yes, all data is processed securely and deleted immediately after calculation. We don't store any personal information.
+                    Yes, all data is processed securely and deleted immediately after calculation. We don&apos;t store any personal information.
                   </p>
                 </details>
               </div>
