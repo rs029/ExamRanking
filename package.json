@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:open": "concurrently \"next dev\" \"wait-on http://localhost:3000 && start http://localhost:3000\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -22,7 +23,10 @@
     "typescript": "^5"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "eslint": "^8",
-    "eslint-config-next": "14.0.4"
+    "eslint-config-next": "14.0.4",
+    "open": "^10.2.0",
+    "wait-on": "^8.0.4"
   }
 }
