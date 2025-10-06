@@ -1,14 +1,14 @@
-import { Metadata } from 'next'
+'use client'
+
 import ExamCard from '@/components/ExamCard'
+import UserDashboard from '@/components/UserDashboard'
 import { Calculator, TrendingUp, Users, Award } from 'lucide-react'
 import examsData from '@/data/exams.json'
-
-export const metadata: Metadata = {
-  title: 'Exam Ranking - Calculate Your Rank for Competitive Exams',
-  description: 'Calculate your rank and analyze performance for JEE Main, NEET, CAT, GATE, UPSC CSE, SSC CGL, Bank PO, CLAT and other competitive exams. Get accurate results instantly.',
-}
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function Home() {
+  const { isAuthenticated, loading } = useAuth()
+
   const stats = [
     {
       icon: Calculator,
@@ -32,6 +32,21 @@ export default function Home() {
     }
   ]
 
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
+      </div>
+    )
+  }
+
+  // Show dashboard for authenticated users
+  if (isAuthenticated) {
+    return <UserDashboard />
+  }
+
+  // Show landing page for non-authenticated users
   return (
     <>
       {/* Hero Section */}
@@ -47,10 +62,16 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="#exams"
+                href="/auth/signup"
                 className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
               >
                 Choose Your Exam
+              </a>
+              <a
+                href="/auth/signup"
+                className="bg-primary-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-400 transition-colors"
+              >
+                Get Started Free
               </a>
               <a
                 href="/contact"
@@ -58,6 +79,25 @@ export default function Home() {
               >
                 Contact Support
               </a>
+            </div>
+            
+            {/* Auth Menu for Quick Access */}
+            <div className="mt-6">
+              <p className="text-primary-100 mb-3">Already have an account?</p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <a
+                  href="/auth/signin"
+                  className="bg-transparent border-2 border-white text-white px-6 py-2 rounded-lg font-medium hover:bg-white hover:text-primary-600 transition-colors"
+                >
+                  Sign In
+                </a>
+                <a
+                  href="/auth/signup"
+                  className="bg-white text-primary-600 px-6 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+                >
+                  Create Account
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -158,7 +198,7 @@ export default function Home() {
             Join thousands of students who trust Exam Ranking for accurate performance analysis and rank calculations.
           </p>
           <a
-            href="#exams"
+            href="/auth/signup"
             className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block"
           >
             Get Started Now

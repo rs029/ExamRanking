@@ -28,8 +28,8 @@ export default function ContactPage() {
                 <div className="flex items-center">
                   <Mail className="h-5 w-5 text-primary-600 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-500">Email</p>
-                    <p className="font-medium text-gray-900">support@examranking.com</p>
+                    <p className="text-sm text-gray-500">Telegram</p>
+                    <p className="font-medium text-gray-900">t.me/happystudyUpsc</p>
                   </div>
                 </div>
                 
@@ -37,7 +37,7 @@ export default function ContactPage() {
                   <Phone className="h-5 w-5 text-primary-600 mr-3" />
                   <div>
                     <p className="text-sm text-gray-500">Phone</p>
-                    <p className="font-medium text-gray-900">+1 (555) 123-4567</p>
+                    <p className="font-medium text-gray-900">+91 99869 42275</p>
                   </div>
                 </div>
                 
@@ -45,7 +45,7 @@ export default function ContactPage() {
                   <MapPin className="h-5 w-5 text-primary-600 mr-3" />
                   <div>
                     <p className="text-sm text-gray-500">Address</p>
-                    <p className="font-medium text-gray-900">123 Education Street<br />New York, NY 10001</p>
+                    <p className="font-medium text-gray-900">Sant Nagar<br />New Delhi, 110084</p>
                   </div>
                 </div>
                 
@@ -53,7 +53,7 @@ export default function ContactPage() {
                   <Clock className="h-5 w-5 text-primary-600 mr-3" />
                   <div>
                     <p className="text-sm text-gray-500">Business Hours</p>
-                    <p className="font-medium text-gray-900">Mon - Fri: 9:00 AM - 6:00 PM<br />Sat - Sun: 10:00 AM - 4:00 PM</p>
+                    <p className="font-medium text-gray-900">Mon - Fri: 9:00 AM - 6:00 PM<br />Sat : 10:00 AM - 2:00 PM</p>
                   </div>
                 </div>
               </div>
@@ -77,7 +77,7 @@ export default function ContactPage() {
                     Which file formats are supported?
                   </summary>
                   <p className="mt-2 text-sm text-gray-600 pl-4">
-                    We support PDF, JPG, PNG, DOC, and DOCX files up to 10MB in size.
+                    We support PDF files up to 10MB in size.
                   </p>
                 </details>
                 
@@ -86,7 +86,7 @@ export default function ContactPage() {
                     Is my data secure?
                   </summary>
                   <p className="mt-2 text-sm text-gray-600 pl-4">
-                    Yes, all data is processed securely and deleted immediately after calculation. We don&apos;t store any personal information.
+                    Yes, all data is processed securely.
                   </p>
                 </details>
               </div>
