@@ -3,8 +3,9 @@ import CalculatorPageClient from './CalculatorPageClient'
 import examsData from '@/data/exams.json'
 import { notFound } from 'next/navigation'
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const exam = examsData.find(e => e.slug === params.slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const exam = examsData.find(e => e.slug === slug)
   
   if (!exam) {
     return {
@@ -30,17 +31,18 @@ export async function generateStaticParams() {
   }))
 }
 interface CalculatorPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
-export default function CalculatorPage({ params }: CalculatorPageProps) {
-  const exam = examsData.find(e => e.slug === params.slug)
+export default async function CalculatorPage({ params }: CalculatorPageProps) {
+  const { slug } = await params
+  const exam = examsData.find(e => e.slug === slug)
   
   if (!exam) {
     notFound()
   }
 
-  return <CalculatorPageClient slug={params.slug} />
+  return <CalculatorPageClient slug={slug} />
 }

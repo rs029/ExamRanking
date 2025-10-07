@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Refund Policy - Exam Ranking',
-  description: 'Learn about Exam Ranking\'s refund policy for premium services and rank calculation features.',
+  description: 'Learn about Exam Ranking&apos;s refund policy for premium services and rank calculation features.',
 }
 
 export default function RefundPage() {

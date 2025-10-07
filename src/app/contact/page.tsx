@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Contact Us - Exam Ranking',
-  description: 'Get in touch with Exam Ranking support team. We\'re here to help with your rank calculations and exam queries.',
+  description: 'Get in touch with Exam Ranking support team. We&apos;re here to help with your rank calculations and exam queries.',
 }
 
 export default function ContactPage() {

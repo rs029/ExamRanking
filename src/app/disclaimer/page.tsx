@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Disclaimer - Exam Ranking',
-  description: 'Important disclaimers regarding the use of Exam Ranking\'s rank calculation services and accuracy of results.',
+  description: 'Important disclaimers regarding the use of Exam Ranking&apos;s rank calculation services and accuracy of results.',
 }
 
 export default function DisclaimerPage() {

@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Terms of Service - Exam Ranking',
-  description: 'Read the terms and conditions for using Exam Ranking\'s rank calculation and performance analysis services.',
+  description: 'Read the terms and conditions for using Exam Ranking&apos;s rank calculation and performance analysis services.',
 }
 
 export default function TermsPage() {
