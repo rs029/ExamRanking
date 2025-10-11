@@ -3,16 +3,37 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { Calculator, History, Bookmark, Settings, Trophy, TrendingUp, Clock, Award } from 'lucide-react'
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
+import { fetchDashboardData, DashboardData } from '@/lib/api'
 
 export default function UserDashboard() {
   const { user } = useAuth()
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      try {
+        setLoading(true)
+        const data = await fetchDashboardData()
+        setDashboardData(data)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load dashboard data')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadDashboardData()
+  }, [])
 
   const quickActions = [
     {
       title: 'Calculate Rank',
       description: 'Start a new rank calculation',
       icon: Calculator,
-      href: '#exams',
+      href: '/calculator',
       color: 'bg-blue-500'
     },
     {
@@ -38,47 +59,41 @@ export default function UserDashboard() {
     }
   ]
 
-  const recentActivity = [
-    {
-      exam: 'JEE Main 2024',
-      date: '2 days ago',
-      rank: '15,234',
-      status: 'completed'
-    },
-    {
-      exam: 'NEET 2024',
-      date: '1 week ago',
-      rank: '8,567',
-      status: 'completed'
-    },
-    {
-      exam: 'CAT 2024',
-      date: '2 weeks ago',
-      rank: '2,145',
-      status: 'completed'
-    }
-  ]
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading your dashboard...</p>
+        </div>
+      </div>
+    )
+  }
 
-  const achievements = [
-    {
-      title: 'First Calculation',
-      description: 'Completed your first rank calculation',
-      icon: Trophy,
-      earned: true
-    },
-    {
-      title: 'Exam Explorer',
-      description: 'Calculated ranks for 5+ different exams',
-      icon: Award,
-      earned: true
-    },
-    {
-      title: 'Consistent User',
-      description: 'Used the platform for 30+ days',
-      icon: TrendingUp,
-      earned: false
-    }
-  ]
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Unable to load dashboard</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Use real data from API or fallback to empty data
+  const recentActivity = dashboardData?.recentActivity || []
+  const achievements = dashboardData?.achievements || []
+  const stats = dashboardData?.stats || { totalCalculations: 0, thisMonthCalculations: 0 }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -97,11 +112,11 @@ export default function UserDashboard() {
             <div className="hidden md:flex items-center space-x-4">
               <div className="text-right">
                 <p className="text-primary-200 text-sm">Total Calculations</p>
-                <p className="text-2xl font-bold">12</p>
+                <p className="text-2xl font-bold">{stats.totalCalculations}</p>
               </div>
               <div className="text-right">
                 <p className="text-primary-200 text-sm">This Month</p>
-                <p className="text-2xl font-bold">3</p>
+                <p className="text-2xl font-bold">{stats.thisMonthCalculations}</p>
               </div>
             </div>
           </div>
@@ -145,20 +160,27 @@ export default function UserDashboard() {
                 Recent Activity
               </h3>
               <div className="space-y-4">
-                {recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
-                    <div>
-                      <p className="font-medium text-gray-900">{activity.exam}</p>
-                      <p className="text-sm text-gray-500">{activity.date}</p>
+                {recentActivity.length > 0 ? (
+                  recentActivity.map((activity, index) => (
+                    <div key={index} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+                      <div>
+                        <p className="font-medium text-gray-900">{activity.exam}</p>
+                        <p className="text-sm text-gray-500">{activity.date}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-primary-600">Rank {activity.rank}</p>
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          {activity.status}
+                        </span>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-primary-600">Rank {activity.rank}</p>
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        {activity.status}
-                      </span>
-                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500">No recent activity yet</p>
+                    <p className="text-sm text-gray-400 mt-1">Start by calculating your first exam rank!</p>
                   </div>
-                ))}
+                )}
               </div>
               <Link 
                 href="/dashboard/history" 
@@ -175,21 +197,30 @@ export default function UserDashboard() {
                 Achievements
               </h3>
               <div className="space-y-3">
-                {achievements.map((achievement, index) => (
-                  <div key={index} className={`flex items-center p-3 rounded-lg ${achievement.earned ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200'}`}>
-                    <div className={`p-2 rounded-full ${achievement.earned ? 'bg-green-500' : 'bg-gray-400'}`}>
-                      <achievement.icon className="h-4 w-4 text-white" />
+                {achievements.map((achievement, index) => {
+                  const iconMap = {
+                    'First Calculation': Trophy,
+                    'Exam Explorer': Award,
+                    'Consistent User': TrendingUp
+                  }
+                  const IconComponent = iconMap[achievement.title as keyof typeof iconMap] || Trophy
+                  
+                  return (
+                    <div key={index} className={`flex items-center p-3 rounded-lg ${achievement.earned ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200'}`}>
+                      <div className={`p-2 rounded-full ${achievement.earned ? 'bg-green-500' : 'bg-gray-400'}`}>
+                        <IconComponent className="h-4 w-4 text-white" />
+                      </div>
+                      <div className="ml-3">
+                        <p className={`font-medium ${achievement.earned ? 'text-green-900' : 'text-gray-500'}`}>
+                          {achievement.title}
+                        </p>
+                        <p className={`text-sm ${achievement.earned ? 'text-green-700' : 'text-gray-400'}`}>
+                          {achievement.description}
+                        </p>
+                      </div>
                     </div>
-                    <div className="ml-3">
-                      <p className={`font-medium ${achievement.earned ? 'text-green-900' : 'text-gray-500'}`}>
-                        {achievement.title}
-                      </p>
-                      <p className={`text-sm ${achievement.earned ? 'text-green-700' : 'text-gray-400'}`}>
-                        {achievement.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           </div>

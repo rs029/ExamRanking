@@ -37,3 +37,5 @@ next-env.d.ts
 
 /generated/prisma
 /backend
+.env.local
+.env.production
