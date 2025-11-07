@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const savedUser = localStorage.getItem('user')
       const token = localStorage.getItem('token')
       
-      if (savedUser && token) {
+      if (savedUser && token && savedUser !== 'undefined' && savedUser !== 'null') {
         try {
           setUser(JSON.parse(savedUser))
         } catch (error) {

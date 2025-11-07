@@ -1,10 +1,11 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
-import { Calculator, History, Bookmark, Settings, Trophy, TrendingUp, Clock, Award } from 'lucide-react'
+import { Calculator, History, Bookmark, Settings, Trophy, TrendingUp, Clock, Award, X, Search } from 'lucide-react'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import { fetchDashboardData, DashboardData } from '@/lib/api'
+import { useRouter } from 'next/navigation'
 
 export default function UserDashboard() {
   const { user } = useAuth()
@@ -33,7 +34,7 @@ export default function UserDashboard() {
       title: 'Calculate Rank',
       description: 'Start a new rank calculation',
       icon: Calculator,
-      href: '/calculator',
+      href: '/exams',
       color: 'bg-blue-500'
     },
     {
