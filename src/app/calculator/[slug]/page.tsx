@@ -1,11 +1,12 @@
 import { Metadata } from 'next'
 import CalculatorPageClient from './CalculatorPageClient'
-import examsData from '@/data/exams.json'
 import { notFound } from 'next/navigation'
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/exams`)
+  const allExams = await response.json()
   const { slug } = await params
-  const exam = examsData.find(e => e.slug === slug)
+  const exam = allExams.find((e: any) => e.slug === slug)
   
   if (!exam) {
     return {
@@ -26,8 +27,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export async function generateStaticParams() {
-  return examsData.map((exam) => ({
-    slug: exam.slug,
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/exams`)
+  const allExams = await response.json()
+  return allExams.map((exam: any) => ({
+    slug: exam.slug
   }))
 }
 interface CalculatorPageProps {
@@ -38,11 +41,13 @@ interface CalculatorPageProps {
 
 export default async function CalculatorPage({ params }: CalculatorPageProps) {
   const { slug } = await params
-  const exam = examsData.find(e => e.slug === slug)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/exams`)
+  const allExams = await response.json()
+  const exam = allExams.find((e: any) => e.slug === slug)
   
   if (!exam) {
     notFound()
   }
 
-  return <CalculatorPageClient slug={slug} />
+  return <CalculatorPageClient exam={exam} />
 }

@@ -10,28 +10,30 @@ import examsData from '@/data/exams.json'
 import { ArrowLeft, Info } from 'lucide-react'
 import Link from 'next/link'
 
-interface CalculatorPageClientProps {
-  slug: string
-}
+     interface CalculatorPageClientProps {
+       exam: {
+         id: number
+         slug: string
+         name: string
+         description: string
+         category: string
+         totalMarks: number
+         subjects: string[]
+       }
+     }
 
-export default function CalculatorPageClient({ slug }: CalculatorPageClientProps) {
+export default function CalculatorPageClient({ exam }: CalculatorPageClientProps) {
   const [result, setResult] = useState<ExamResult | null>(null)
   const [leaderboard, setLeaderboard] = useState<any[]>([])
-  const [exam, setExam] = useState<any>(null)
+  
 
-  useEffect(() => {
-    const foundExam = examsData.find(e => e.slug === slug)
-    if (!foundExam) {
-      notFound()
-    }
-    setExam(foundExam)
-  }, [slug])
+
 
   const handleFormSubmit = async (formData: FormData): Promise<ExamResult> => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 2000))
     
-    const mockResult = generateMockResult(slug)
+      const mockResult = generateMockResult(exam.slug)
     const mockLeaderboard = generateMockLeaderboard()
     
     setResult(mockResult)
@@ -40,9 +42,7 @@ export default function CalculatorPageClient({ slug }: CalculatorPageClientProps
     return mockResult
   }
 
-  if (!exam) {
-    return <div>Loading...</div>
-  }
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
