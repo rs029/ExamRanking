@@ -32,15 +32,60 @@ export default function CalculatorPageClient({ exam }: CalculatorPageClientProps
   const handleFormSubmit = async (formData: FormData): Promise<ExamResult> => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 2000))
+
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        throw new Error ("Please login to calculate rank.")
+      }
+
+      const url = formData.get('url') as string
+      const category = formData.get('category') as string
+      const inputType = formData.get('inputType') as string
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/submissions/url`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          examId: exam.id,
+          url: url
+        })
+      })
+
+      if (!response.ok) {
+        const errorData =  await response.json()
+        throw new Error(errorData.error || 'Failed to calculate rank')
+      }
+
+      const data = await response.json()
+
+      const result: ExamResult = {
+        rank: data.rank,
+        score: data.score,
+        totalMarks: exam.totalMarks,
+        percentage: (data.score / exam.totalMarks) * 100,
+        categoryRank: data.categoryRank,
+        normalizedMarks: data.score,
+        attempted: data.correct + data.incorrect,
+        unattempted: exam.totalMarks - (data.correct + data.incorrect),
+        correct: data.correct,
+        incorrect: data.incorrect,
+        category: category,
+      }
+
+      setResult(result)
+      setLeaderboard([])
+      return result
     
-      const mockResult = generateMockResult(exam.slug)
-    const mockLeaderboard = generateMockLeaderboard()
-    
-    setResult(mockResult)
-    setLeaderboard(mockLeaderboard)
-    
-    return mockResult
-  }
+    } catch(error) {
+
+      console.log('Error calculating rank:', error)
+      throw error
+    }
+  } 
 
 
 
