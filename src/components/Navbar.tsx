@@ -20,7 +20,7 @@ export default function Navbar() {
 
   const userNavigation = [
     { name: 'Dashboard', href: '/dashboard' },
-    { name: 'My Exams', href: '/dashboard/exams' },
+    { name: 'My Exams', href: '/exams' },
     { name: 'History', href: '/dashboard/history' },
     { name: 'Settings', href: '/dashboard/settings' },
   ]

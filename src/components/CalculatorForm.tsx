@@ -4,9 +4,14 @@ import { useState } from 'react'
 import { Upload, Link as LinkIcon, Loader2 } from 'lucide-react'
 import { ExamResult } from '@/types/exam'
 
+interface SubmitResponse {
+  result?: ExamResult
+  error?: string
+}
+
 interface CalculatorFormProps {
   examName: string
-  onSubmit: (data: FormData) => Promise<ExamResult>
+  onSubmit: (data: FormData) => Promise<SubmitResponse>
 }
 
 export default function CalculatorForm({ examName, onSubmit }: CalculatorFormProps) {
@@ -15,10 +20,12 @@ export default function CalculatorForm({ examName, onSubmit }: CalculatorFormPro
   const [file, setFile] = useState<File | null>(null)
   const [category, setCategory] = useState('General')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError(null) // clear previous errors
 
     try {
       const formData = new FormData()
@@ -30,9 +37,20 @@ export default function CalculatorForm({ examName, onSubmit }: CalculatorFormPro
       }
       formData.append('category', category)
 
-      await onSubmit(formData)
+      const response = await onSubmit(formData)
+
+      if (response.error) {
+        setError(response.error)
+      } else {
+        setError(null)
+      }
     } catch (error) {
       console.error('Error submitting form:', error)
+      // Extract error message
+      const errorMessage = error instanceof Error
+        ? error.message
+        : 'An error occurred while calculating rank. Please try again.'
+      setError(errorMessage)
     } finally {
       setIsLoading(false)
     }
@@ -93,7 +111,12 @@ export default function CalculatorForm({ examName, onSubmit }: CalculatorFormPro
               type="url"
               id="url"
               value={url}
-              onChange={(e) => setUrl(e.target.value)}
+              onChange={(e) => {
+                setUrl(e.target.value)
+                if (error) {
+                  setError(null)
+                }
+              }}
               placeholder="https://example.com/your-result-link"
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
               required
@@ -195,6 +218,38 @@ export default function CalculatorForm({ examName, onSubmit }: CalculatorFormPro
             </select>
           </div>
         </div>
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-md p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-red-800">
+                  Error
+                </h3>
+                <div className="mt-2 text-sm text-red-700">
+                  <p>{error}</p>
+                </div>
+              </div>
+              <div className="ml-auto pl-3">
+                <button
+                  type="button"
+                  onClick={() => setError(null)}
+                  className="inline-flex text-red-400 hover:text-red-600"
+                >
+                  <span className="sr-only">Dismiss</span>
+                  <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Submit Button */}
         <button

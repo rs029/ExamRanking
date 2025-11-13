@@ -43,3 +43,41 @@ export const fetchDashboardData = async (): Promise<DashboardData> => {
 
   return response.json()
 }
+
+export interface ExamAttemptHistory {
+  id: number
+  exam: {
+    id: number
+    name: string
+    code: string | null
+    totalMarks: number
+    meta: any
+  }
+  score: number | null
+  totalQuestions: number | null
+  correct: number | null
+  wrong: number | null
+  unattempted: number | null
+  url: string | null
+  submittedAt: string
+}
+
+export const fetchExamHistory = async (): Promise<ExamAttemptHistory[]> => {
+  const token = localStorage.getItem('token')
+  if (!token) throw new Error('No authentication token found')
+
+  const response = await fetch(`${API_BASE_URL}/submissions/history`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!response.ok) {
+    const message = await response.text()
+    throw new Error(message || 'Failed to fetch exam history')
+  }
+
+  return response.json()
+}

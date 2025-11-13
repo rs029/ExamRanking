@@ -10,38 +10,37 @@ import examsData from '@/data/exams.json'
 import { ArrowLeft, Info } from 'lucide-react'
 import Link from 'next/link'
 
-     interface CalculatorPageClientProps {
-       exam: {
-         id: number
-         slug: string
-         name: string
-         description: string
-         category: string
-         totalMarks: number
-         subjects: string[]
-       }
-     }
+interface CalculatorPageClientProps {
+  exam: {
+    id: number
+    slug: string
+    name: string
+    description: string
+    category: string
+    totalMarks: number
+    subjects: string[]
+  }
+}
 
 export default function CalculatorPageClient({ exam }: CalculatorPageClientProps) {
   const [result, setResult] = useState<ExamResult | null>(null)
   const [leaderboard, setLeaderboard] = useState<any[]>([])
-  
 
 
 
-  const handleFormSubmit = async (formData: FormData): Promise<ExamResult> => {
+
+  const handleFormSubmit = async (formData: FormData): Promise<{ result?: ExamResult; error?: string }> => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 2000))
 
     try {
       const token = localStorage.getItem('token')
       if (!token) {
-        throw new Error ("Please login to calculate rank.")
+        throw new Error("Please login to calculate rank.")
       }
 
       const url = formData.get('url') as string
       const category = formData.get('category') as string
-      const inputType = formData.get('inputType') as string
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/submissions/url`, {
         method: 'POST',
@@ -56,36 +55,59 @@ export default function CalculatorPageClient({ exam }: CalculatorPageClientProps
       })
 
       if (!response.ok) {
-        const errorData =  await response.json()
-        throw new Error(errorData.error || 'Failed to calculate rank')
+        let errorMessage = 'Failed to calculate rank'
+
+        try {
+          const contentType = response.headers.get('content-type')
+          if (contentType && contentType.includes('application/json')) {
+            const errorData = await response.json()
+            errorMessage = errorData?.error || errorMessage
+          } else {
+            // If not JSON, try to get text
+            const errorText = await response.text()
+            errorMessage = errorText || errorMessage
+          }
+        } catch (parseError) {
+          // If parsing fails, use status text
+          errorMessage = response.statusText || `HTTP ${response.status}: Failed to calculate rank`
+        }
+
+        return { error: errorMessage }
       }
 
       const data = await response.json()
+
+      const incorrectAnswers = data.wrong ?? 0
+      const correctAnswers = data.correct ?? 0
+      const totalQuestions = data.total ?? correctAnswers + incorrectAnswers
 
       const result: ExamResult = {
         rank: data.rank,
         score: data.score,
         totalMarks: exam.totalMarks,
-        percentage: (data.score / exam.totalMarks) * 100,
+        percentage: exam.totalMarks ? (data.score / exam.totalMarks) * 100 : 0,
         categoryRank: data.categoryRank,
         normalizedMarks: data.score,
-        attempted: data.correct + data.incorrect,
-        unattempted: exam.totalMarks - (data.correct + data.incorrect),
-        correct: data.correct,
-        incorrect: data.incorrect,
+        attempted: correctAnswers + incorrectAnswers,
+        unattempted: Math.max(totalQuestions - (correctAnswers + incorrectAnswers), 0),
+        correct: correctAnswers,
+        incorrect: incorrectAnswers,
         category: category,
       }
 
       setResult(result)
       setLeaderboard([])
-      return result
-    
-    } catch(error) {
+      return { result }
+
+    } catch (error) {
 
       console.log('Error calculating rank:', error)
-      throw error
+      setResult(null)
+      setLeaderboard([])
+      const errorMessage = error instanceof Error ? error.message : 'Failed to calculate rank'
+      return { error: errorMessage }
     }
-  } 
+  }
 
 
 
@@ -94,7 +116,7 @@ export default function CalculatorPageClient({ exam }: CalculatorPageClientProps
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <div className="mb-6">
-          <Link 
+          <Link
             href="/"
             className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-4"
           >
@@ -114,7 +136,7 @@ export default function CalculatorPageClient({ exam }: CalculatorPageClientProps
             <div>
               <h3 className="text-sm font-medium text-blue-900 mb-1">How it works</h3>
               <p className="text-sm text-blue-800">
-                Upload your {exam.name} result document or paste the result URL. Our system will analyze your performance 
+                Upload your {exam.name} result document or paste the result URL. Our system will analyze your performance
                 and calculate your rank based on the latest normalization methods and cutoff trends.
               </p>
             </div>
@@ -124,7 +146,7 @@ export default function CalculatorPageClient({ exam }: CalculatorPageClientProps
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Form Section */}
           <div className="lg:col-span-1">
-            <CalculatorForm 
+            <CalculatorForm
               examName={exam.name}
               onSubmit={handleFormSubmit}
             />
@@ -146,12 +168,12 @@ export default function CalculatorPageClient({ exam }: CalculatorPageClientProps
                   <span className="font-medium text-gray-900">{exam.subjects.length}</span>
                 </div>
               </div>
-              
+
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <h4 className="text-sm font-medium text-gray-900 mb-2">Subjects Covered</h4>
                 <div className="flex flex-wrap gap-2">
                   {exam.subjects.map((subject: string, index: number) => (
-                    <span 
+                    <span
                       key={index}
                       className="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded-full"
                     >
@@ -166,7 +188,7 @@ export default function CalculatorPageClient({ exam }: CalculatorPageClientProps
           {/* Results Section */}
           <div className="lg:col-span-2">
             {result ? (
-              <ResultsPanel 
+              <ResultsPanel
                 result={result}
                 examName={exam.name}
                 leaderboard={leaderboard}

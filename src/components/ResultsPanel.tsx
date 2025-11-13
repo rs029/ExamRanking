@@ -107,7 +107,7 @@ export default function ResultsPanel({ result, examName, leaderboard = [] }: Res
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Metrics</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Normalized Marks</span>
+                <span className="text-sm text-gray-600">Marks</span>
                 <span className="font-medium text-gray-900">{result.normalizedMarks.toFixed(2)}</span>
               </div>
               <div className="flex items-center justify-between">
